@@ -2,19 +2,33 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const cors = require("cors");
+ // **************************************************
 
+ // ***********Express Config**********************
 const app = express();
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
-/*
-pass 3eq*vuvnphFT&*X
-*/
+ // **************************************************
 
+ // ************** DB Connection*************************
+mongoose
+  .connect(
+   "mongodb+srv://user1:12@cluster0.5cfu9.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      useFindAndModify: false,
+    }
+  )
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
+ // **************************************************
 
+ // **************** Routes ***********************
 const routes = require("./routes");
 app.use("/api", routes);
+ // **************************************************
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

@@ -3,20 +3,20 @@
     <p>register</p>
     <form v-on:submit="register">
       <label for="username">username: </label>
-      <input type="text" name="username" autofocus required />
+      <input type="text" name="username" />
 
       <label for="email">email: </label>
-      <input type="email" name="email" required />
+      <input type="email" name="email" />
 
       <label for="password">password: </label>
-      <input type="password" name="password" required />
+      <input type="password" name="password" />
 
       <label for="password2">repeat password: </label>
-      <input type="password" name="password2" required />
+      <input type="password" name="password2" />
 
       <button type="submit">Register</button>
     </form>
-    {{ error }}
+    {{ errors }}
   </div>
 </template>
 
@@ -27,7 +27,7 @@ import axios from "axios";
 export default {
   name: "Register",
   data() {
-    return { error: "" };
+    return { errors: "" };
   },
   methods: {
     register: function(e) {
@@ -39,7 +39,13 @@ export default {
       let password2 = e.target.elements.password2.value;
 
       if (!username || !password || !email || !password2) {
-        this.error = "All fields must be filled";
+        return this.errors = "All fields must be filled";
+      }
+      if (password != password2) {
+        return this.errors = "Passwords must match ";
+      }
+      if (password.length <= 6) {
+        return this.errors = "Password must be longer ";
       } else {
         let register = () => {
           let data = {
@@ -56,6 +62,7 @@ export default {
             })
             .catch((error) => {
               console.log(error);
+              this.errors = error.response.data;
             });
         };
         register();
