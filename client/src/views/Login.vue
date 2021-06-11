@@ -8,7 +8,7 @@
       <input type="password" name="password" required />
       <button type="submit">Login</button>
     </form>
-    {{ error }}
+    {{ errors }}
   </div>
 </template>
 <script>
@@ -17,7 +17,7 @@ import axios from "axios";
 export default {
   name: "Login",
   data() {
-    return { error: "" };
+    return { errors: "" };
   },
   methods: {
     login: function(e) {
@@ -26,7 +26,7 @@ export default {
       let email = e.target.elements.email.value;
       let password = e.target.elements.password.value;
       if (!email || !password) {
-       this.error="All fields must be filled";
+        this.error = "All fields must be filled";
       } else {
         let login = () => {
           let data = {
@@ -41,7 +41,8 @@ export default {
               router.push("/");
             })
             .catch((error) => {
-              console.log(error);
+              console.log(error.response.data[1].Error);
+              this.errors = error.response.data[1].Error;
             });
         };
 

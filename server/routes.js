@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 const router = express.Router();
 const User = require("./models/User");
 const bcrypt = require("bcrypt");
@@ -7,6 +8,7 @@ const bcrypt = require("bcrypt");
 // ************ Register **********************
 router.post("/register", (req, res) => {
   //Checks if the email is already in use, if passwords match and are long enough and then register if conditions check out
+  //after encrypting the password
   function checkUser(userName, userEmail, userPassword, userPassword2) {
     let errorMsg = [];
     console.log(req.body);
@@ -75,8 +77,27 @@ router.post("/register", (req, res) => {
 
 // *************** Login ***********************
 router.post("/login", (req, res, next) => {
-  console.log(req.body);
-  return res.status(202).send("Login successful");
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(400).send(["Cannot log in", info]);
+    }
+    req.login(user, (err) => {
+      console.log(req.user.name);
+      return res.send("Login successful");
+    });
+  })(req, res, next);
 });
+// **************************************************
+
+// ************ Logout **************************
+router.get("/logout", (req, res) => {
+  req.logout();
+  console.log("Logout successful");
+  return res.status(200).send();
+});
+
 // **************************************************
 module.exports = router;
