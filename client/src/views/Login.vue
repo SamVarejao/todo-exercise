@@ -1,6 +1,7 @@
 <template>
   <div class="login">
-    <p>login</p>
+    <h1>login</h1>
+
     <form v-on:submit="login">
       <label for="email">email: </label>
       <input type="email" name="email" autofocus required />
@@ -8,6 +9,10 @@
       <input type="password" name="password" required />
       <button type="submit">Login</button>
     </form>
+
+    <p>
+      New here? <span> <router-link to="/register">Register!</router-link></span>
+    </p>
     {{ errors }}
   </div>
 </template>
@@ -33,12 +38,11 @@ export default {
             email,
             password,
           };
-          console.log(data);
           axios
             .post("/api/login", data)
             .then(() => {
               console.log("Log in successful");
-              router.push("/");
+              router.push("/list");
             })
             .catch((error) => {
               console.log(error.response.data[1].Error);

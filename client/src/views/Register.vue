@@ -1,21 +1,22 @@
 <template>
   <div class="register">
-    <p>register</p>
+    <h1>register</h1>
     <form v-on:submit="register">
       <label for="username">username: </label>
-      <input type="text" name="username" />
+      <input type="text" name="username"  autofocus required/>
 
       <label for="email">email: </label>
-      <input type="email" name="email" />
+      <input type="email" name="email" required/>
 
       <label for="password">password: </label>
-      <input type="password" name="password" />
+      <input type="password" name="password" required/>
 
       <label for="password2">repeat password: </label>
-      <input type="password" name="password2" />
+      <input type="password" name="password2" required/>
 
       <button type="submit">Register</button>
     </form>
+    <p>Been here before? <span><router-link to="/login">Login!</router-link> </span></p>
     {{ errors }}
   </div>
 </template>
@@ -58,7 +59,7 @@ export default {
           axios
             .post("/api/register", data)
             .then(() => {
-              router.push("/");
+              router.push("/login");
             })
             .catch((error) => {
               console.log(error);

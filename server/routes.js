@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 const User = require("./models/User");
+const Item = require("./models/Item");
 const bcrypt = require("bcrypt");
 // **************************************************
 
@@ -98,6 +99,73 @@ router.get("/logout", (req, res) => {
   console.log("Logout successful");
   return res.status(200).send();
 });
-
 // **************************************************
+
+// **************** Create *************************
+router.post("/create", (req, res) => {
+  console.log(req.body);
+
+  // Checks for Item conditions before posting it to the database
+  function createItem(
+    taskName,
+    completionNum,
+    startDate,
+    dueDate,
+    prioLevel,
+    currStatus
+  ) {
+    if (
+      !taskName ||
+      !completionNum ||
+      !startDate ||
+      !dueDate ||
+      !prioLevel ||
+      !prioLevel ||
+      !req.user._id
+    ) {
+      return res.status(400).send();
+    } else {
+      const newItem = new Item({
+        task: taskName,
+        completion: completionNum,
+        start: startDate,
+        due: dueDate,
+        priority: prioLevel,
+        status: currStatus,
+        authorID: req.user._id,
+      });
+      newItem
+        .save()
+        .then(() => {
+          console.log("task created");
+          return res.status(201).send("Post Created");
+        })
+        .catch((errors) => {
+          console.error(errors);
+          return res.status(400).send();
+        });
+    }
+  }
+
+  let task = req.body.task;
+  let completion = req.body.completion;
+  let start = req.body.start;
+  let due = req.body.due;
+  let priority = req.body.priority;
+  let status = req.body.status;
+
+  createItem(task, completion, start, due, priority, status);
+});
+// **************************************************
+
+// *************** Safeguard *************************
+router.get("/safeguard", (req, res) => {
+  if (req.user != undefined) {
+    return res.send({ login: true });
+  } else {
+    return res.send({ login: false });
+  }
+});
+// **************************************************
+
 module.exports = router;
