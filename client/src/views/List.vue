@@ -1,27 +1,64 @@
 <template>
   <div class="list">
     <button @click="logout">Logout</button>
-    <Create></Create>
-    <Item></Item>
+    <create></create>
+    <div>
+      <item-box
+        v-for="(item, index) in items"
+        v-bind:key="index"
+        v-bind:keyNum="index"
+        v-bind:task="item.task"
+        v-bind:completion="item.completion"
+        v-bind:start="item.start"
+        v-bind:due="item.due"
+        v-bind:priority="item.priority"
+        v-bind:status="item.status"
+        v-bind:id="item._id"
+      >
+      </item-box>
+    </div>
   </div>
 </template>
 
 <script>
-import Item from "../components/Item.vue";
 import Create from "../components/Create.vue";
+import ItemBox from "../components/ItemBox.vue";
+
+import { bus } from "../main";
 import axios from "axios";
-import router from '../router';
+import router from "../router";
+
 export default {
   name: "List",
-  components: { Item, Create },
+  components: { ItemBox, Create },
+
+  data() {
+    return { items: null };
+  },
+
   methods: {
     logout: function() {
-      axios.get("/api/logout").then(() => 
-      {
-          console.log("User logout");
-          router.push("/");
+      axios.get("/api/logout").then(() => {
+        console.log("User logout");
+        router.push("/");
       });
     },
+  },
+  async created() {
+    this.items = await axios.get("api/retrieve").then((response) => {
+      return response.data;
+    });
+
+    bus.$on("loadNew", async () => {
+      this.items = await axios.get("api/retrieve").then((response) => {
+        return response.data;
+      });
+    });
+
+    bus.$on("removeItem", (data) => {
+      this.items.splice(data, 1);
+      console.log(data);
+    });
   },
 };
 </script>

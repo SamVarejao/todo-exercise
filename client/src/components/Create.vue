@@ -48,6 +48,7 @@
 
 <script>
 import axios from "axios";
+import { bus } from '../main'
 export default {
   name: "Create",
   data() {
@@ -75,6 +76,7 @@ export default {
         axios
           .post("/api/create", data)
           .then(() => {
+            bus.$emit("loadNew");
             console.log("New task created");
           })
           .catch((error) => {

@@ -4,6 +4,7 @@ const router = express.Router();
 const User = require("./models/User");
 const Item = require("./models/Item");
 const bcrypt = require("bcrypt");
+const { eventNames } = require("./models/User");
 // **************************************************
 
 // ************ Register **********************
@@ -138,7 +139,7 @@ router.post("/create", (req, res) => {
         .save()
         .then(() => {
           console.log("task created");
-          return res.status(201).send("Post Created");
+          return res.status(201).send("Item Created");
         })
         .catch((errors) => {
           console.error(errors);
@@ -168,4 +169,86 @@ router.get("/safeguard", (req, res) => {
 });
 // **************************************************
 
+// *****************Get Items**************************
+router.get("/retrieve", (req, res) => {
+  Item.find({ authorID: req.user._id })
+    .then((items) => {
+      return res.status(200).send(items);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+// **************************************************
+
+// ***************** Delete Items ***************************
+router.delete("/delete/:id", (req, res) => {
+  Item.findOneAndDelete({ _id: req.params.id, authorID: req.user._id }).exec();
+  console.log("Item deleted");
+  return res.status(200).send();
+});
+// **************************************************
+
+// **************************************************
+router.post("/edit", (req, res) => {
+  function updateItem(
+    completionNum,
+    startDate,
+    dueDate,
+    prioLevel,
+    currStatus,
+    id
+  ) {
+    Item.findOne({ _id: id })
+      .then((item) => {
+        let query = item;
+        if (completionNum != null) {
+          query.completion = completionNum;
+        }
+        if (currStatus != null) {
+          query.status = currStatus;
+        }
+        if (startDate != "") {
+          query.start = startDate;
+        }
+        if (dueDate != "") {
+          query.due = dueDate;
+        }
+        if (prioLevel != null) {
+          query.priority = prioLevel;
+        }
+        return query;
+      })
+      .then((query) => {
+        //console.log(query);
+        Item.findOneAndUpdate(
+          { _id: query._id },
+          {
+            $set: {
+              completion: query.completion,
+              status: query.status,
+              start: query.start,
+              due: query.due,
+              priority: query.priority,
+            },
+          },
+          { new: true }
+        ).exec();
+      })
+      .then(() => {
+        return res.status(200).send();
+      });
+  }
+
+  let completion = req.body.completion;
+  let start = req.body.start;
+  let due = req.body.due;
+  let priority = req.body.priority;
+  let status = req.body.status;
+  let id = req.body.id;
+console.log(req.body.due);
+
+  updateItem(completion, start, due, priority, status, id);
+});
+// **************************************************
 module.exports = router;
