@@ -1,55 +1,47 @@
 <template>
-  <div class="wrapper">
+  <div class="itemBox">
     <div class="itemDiv">
-      <p>{{ task }}</p>
-      <p>{{ completion }}%</p>
-      <p>{{ start }}</p>
-      <p>{{ due }}</p>
-      <p>{{ priority }}</p>
-      <p>{{ status }}</p>
-
-      <button @click="deleteItem">Delete</button>
+      <p class=" gc1">{{ task }}</p>
+      <p class=" gc2">{{ completion }}%</p>
+      <p class=" gc3">{{ start }}</p>
+      <p class=" gc4">{{ due }}</p>
+      <p class="gc5">{{ priority }}</p>
+      <p class="gc6">{{ status }}</p>
+      <button @click="deleteItem" class=" gc8">Delete</button>
     </div>
-    <div class="editDiv">
-      <form v-on:submit="editItem">
-        <label for="completion">Completion: </label>
-        <select v-model="selected" @change="percentVal">
-          <option value="0">0%</option>
-          <option value="10">10%</option>
-          <option value="20">20%</option>
-          <option value="30">30%</option>
-          <option value="40">40%</option>
-          <option value="50">50%</option>
-          <option value="60">60%</option>
-          <option value="70">70%</option>
-          <option value="80">80%</option>
-          <option value="90">90%</option>
-          <option value="100">100%</option>
-        </select>
+    <form v-on:submit="editItem">
+      <select v-model="selected" class=" gc2" @change="percentVal">
+        <option value="0">0%</option>
+        <option value="10">10%</option>
+        <option value="20">20%</option>
+        <option value="30">30%</option>
+        <option value="40">40%</option>
+        <option value="50">50%</option>
+        <option value="60">60%</option>
+        <option value="70">70%</option>
+        <option value="80">80%</option>
+        <option value="90">90%</option>
+        <option value="100">100%</option>
+      </select>
 
-        <label for="start">Start: </label>
-        <input type="date" name="start" />
+      <input type="date" name="start" class=" gc3" />
 
-        <label for="due">Due: </label>
-        <input type="date" name="due" />
+      <input type="date" name="due" class=" gc4" />
 
-        <label for="priority">Priority: </label>
-        <select v-model="selected" @change="priorityVal">
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
+      <select v-model="selected" class=" gc5" @change="priorityVal">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
 
-        <label for="status">Status: </label>
-        <select v-model="selected" @change="statusVal">
-          <option selected value="Not started">Not started</option>
-          <option value="Started">Started</option>
-          <option value="Completed">Completed</option>
-        </select>
+      <select v-model="selected" class=" gc6" @change="statusVal">
+        <option selected value="Not started">Not started</option>
+        <option value="Started">Started</option>
+        <option value="Completed">Completed</option>
+      </select>
 
-        <button type="submit">Edit</button>
-      </form>
-    </div>
+      <button type="submit" class=" gc8">Edit</button>
+    </form>
   </div>
 </template>
 
@@ -89,9 +81,9 @@ export default {
       let due = e.target.elements.due.value;
       let priority = this.priVal;
       let status = this.statVal;
-      let id=this.id;
+      let id = this.id;
 
-      let data = { completion, start, due, priority, status, id};
+      let data = { completion, start, due, priority, status, id };
       console.log(data.due);
 
       axios
@@ -126,18 +118,67 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.itemBox {
+  margin-top: 1px;
+  width: 95vw;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px 10px;
+}
+
 .itemDiv {
-  display: flex;
-  border: 1px solid black;
-  margin: 20px auto 0px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: 100%;
+  row-gap: 5px;
+  column-gap: 10px;
+  background-color: rgba(0, 0, 0, 0.377);
+  padding: 10px 10px;
+  color: white;
+  
 }
-.itemDiv p{
-  margin-left:20px ;
+
+form {
+  background-color: rgba(0, 0, 0, 0.377);
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: 100%;
+  row-gap: 5px;
+  column-gap: 10px;
+  padding: 10px 10px;
 }
-.editDiv {
-  display: flex;
-  border: 1px solid black;
-  margin: 0px auto 20px;
+.gc1 {
+  grid-column: 1;
+}
+.gc2 {
+  grid-column: 2;
+}
+.gc3 {
+  grid-column: 3;
+}
+.gc4 {
+  grid-column: 4;
+}
+.gc5 {
+  grid-column: 5;
+}
+.gc6 {
+  grid-column: 6;
+}
+.gc7 {
+  grid-column: 7;
+}
+.gc8 {
+  grid-column: 8;
+}
+.gr1 {
+  grid-row: 1;
+}
+.gr2 {
+  grid-row: 2;
 }
 </style>

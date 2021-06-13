@@ -1,8 +1,7 @@
 <template>
   <div class="list">
-    <button @click="logout">Logout</button>
     <create></create>
-    <div>
+    <div class="postList">
       <item-box
         v-for="(item, index) in items"
         v-bind:key="index"
@@ -26,7 +25,6 @@ import ItemBox from "../components/ItemBox.vue";
 
 import { bus } from "../main";
 import axios from "axios";
-import router from "../router";
 
 export default {
   name: "List",
@@ -34,15 +32,6 @@ export default {
 
   data() {
     return { items: null };
-  },
-
-  methods: {
-    logout: function() {
-      axios.get("/api/logout").then(() => {
-        console.log("User logout");
-        router.push("/");
-      });
-    },
   },
   async created() {
     this.items = await axios.get("api/retrieve").then((response) => {
@@ -63,4 +52,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.list {
+  overflow: hidden;
+  height: 100vh;
+}
+.postList {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 80%;
+}
+</style>

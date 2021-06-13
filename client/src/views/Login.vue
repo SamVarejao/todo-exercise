@@ -1,17 +1,17 @@
 <template>
   <div class="login">
-    <h1>login</h1>
+    <h1>Login</h1>
 
     <form v-on:submit="login">
-      <label for="email">email: </label>
-      <input type="email" name="email" autofocus required />
-      <label for="password">password: </label>
-      <input type="password" name="password" required />
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" autofocus required />
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required />
       <button type="submit">Login</button>
     </form>
-
     <p>
-      New here? <span> <router-link to="/register">Register!</router-link></span>
+      New here?
+      <span> <router-link to="/register">Register!</router-link></span>
     </p>
     {{ errors }}
   </div>
@@ -56,3 +56,49 @@ export default {
   },
 };
 </script>
+<style scoped>
+.login {
+  background-color: white;
+  display: grid;
+  grid-template-rows: 1fr 5fr 1fr;
+  grid-template-columns: 20% auto 20%;
+  height: 500px;
+  width: 500px;
+  border-radius: 5px;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+form {
+  grid-column: 2;
+  grid-row: 2;
+  margin-right: auto;
+  margin-left: auto;
+}
+input {
+  display: block;
+}
+label {
+  display: block;
+  margin-top: 15px;
+}
+button {
+  margin: 30px auto;
+  display: block;
+}
+h1 {
+  grid-column: 2;
+  grid-row: 1;
+  margin-right: auto;
+  margin-left: auto;
+}
+p {
+  grid-column: 2;
+  grid-row: 3;
+  margin-right: auto;
+  margin-left: auto;
+}
+</style>
